@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCore.Console", "DotNetCore.Console\DotNetCore.Console.csproj", "{69040292-07D6-4AFB-A3EA-D7DB473330EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCore.XUnitTestes", "DotNetCore.XUnitTestes\DotNetCore.XUnitTestes.csproj", "{AA1DADA9-E4C0-4B10-B900-6B520EA92487}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{69040292-07D6-4AFB-A3EA-D7DB473330EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69040292-07D6-4AFB-A3EA-D7DB473330EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69040292-07D6-4AFB-A3EA-D7DB473330EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA1DADA9-E4C0-4B10-B900-6B520EA92487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA1DADA9-E4C0-4B10-B900-6B520EA92487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA1DADA9-E4C0-4B10-B900-6B520EA92487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA1DADA9-E4C0-4B10-B900-6B520EA92487}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
