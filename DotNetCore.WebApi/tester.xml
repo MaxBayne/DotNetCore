@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetCore.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:DotNetCore.WebApi.Controllers.ProductsController.GetProductById(System.String)">
+            <summary>
+            Return product for given id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

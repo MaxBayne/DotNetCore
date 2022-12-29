@@ -13,8 +13,6 @@ namespace DotNetCore.WebAppRazorPages
             //builder.Services.AddHttpContextAccessor(); //Allow Access HttpContent from another Project like BusinessLogic
             builder.Services.AddTransient<IProductsService,ProductsService>();
             
-            
-            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
