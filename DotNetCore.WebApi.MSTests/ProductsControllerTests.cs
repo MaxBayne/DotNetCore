@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace DotNetCore.WebApi.Tests
+namespace DotNetCore.WebApi.MSTests
 {
+    [TestClass]
     public class ProductsControllerTests
     {
         private readonly ILogger<ProductsController> _fakeLogger;
         private readonly IProductsService _fakeProductService;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly List<Product> _productsDummy;
 
         public ProductsControllerTests()
@@ -31,7 +33,7 @@ namespace DotNetCore.WebApi.Tests
             A.CallTo(() => _fakeProductService.GetAllProductsAsync()).Returns(_productsDummy);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Get_Product_BY_Id_Return_Ok()
         {
             //Arrange
@@ -43,12 +45,12 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as OkObjectResult;
 
             //Assert
-            Assert.NotNull(actualResult);
-            Assert.Equal(StatusCodes.Status200OK, actualResult?.StatusCode);
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
 
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Get_Product_BY_Id_Return_Not_Found()
         {
             //Arrange
@@ -60,13 +62,13 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as NotFoundResult;
 
             //Assert
-            Assert.NotNull(actualResult);
-            Assert.Equal(StatusCodes.Status404NotFound, actualResult?.StatusCode);
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
 
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task Get_All_Products_Return_Ok()
         {
             //Arrange
@@ -77,11 +79,11 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as OkObjectResult;
 
             //Assert
-            Assert.NotNull(actualResult);
-            Assert.Equal(StatusCodes.Status200OK, actualResult?.StatusCode);
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Get_All_Products_Return_Not_Found()
         {
             //Fake
@@ -95,12 +97,12 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as NotFoundResult;
 
             //Assert
-            Assert.NotNull(actualResult);
-            Assert.Equal(StatusCodes.Status404NotFound, actualResult?.StatusCode);
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Create_Product_Return_Created()
         {
             //Arrange
@@ -116,10 +118,10 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as CreatedResult;
 
             //Assert
-            Assert.Equal(StatusCodes.Status201Created, actualResult?.StatusCode);
+            Assert.AreEqual(StatusCodes.Status201Created, actualResult?.StatusCode);
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Product_Return_BadRequest()
         {
             //Arrange
@@ -133,7 +135,7 @@ namespace DotNetCore.WebApi.Tests
             var actualResult = actionResult as BadRequestObjectResult;
 
             //Assert
-            Assert.Equal(StatusCodes.Status400BadRequest, actualResult?.StatusCode);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, actualResult?.StatusCode);
         }
     }
 }
