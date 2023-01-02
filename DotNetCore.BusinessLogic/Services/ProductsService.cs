@@ -8,9 +8,9 @@ namespace DotNetCore.BusinessLogic.Services
     {
         Task<IEnumerable<Product>?> GetAllProductsAsync();
         Task<Product> CreateProductAsync(Product newProduct);
-        Task<Product> UpdateProductAsync(Product updatedProduct);
-        Task<Product> DeleteProductAsync(Product deletedProduct);
-        Task<Product> DeleteProductAsync(string id);
+        Task<Product?> UpdateProductAsync(Product updatedProduct);
+        Task<bool> DeleteProductAsync(Product deletedProduct);
+        Task<bool> DeleteProductAsync(string id);
     }
 
     public class ProductsService : IProductsService
@@ -36,21 +36,21 @@ namespace DotNetCore.BusinessLogic.Services
             return await productsDa.CreateProductAsync(newProduct);
         }
 
-        public async Task<Product> UpdateProductAsync(Product updatedProduct)
+        public async Task<Product?> UpdateProductAsync(Product updatedProduct)
         {
             var productsDa = new ProductsDa(_environment);
 
             return await productsDa.UpdateProductAsync(updatedProduct);
         }
 
-        public async Task<Product> DeleteProductAsync(Product deletedProduct)
+        public async Task<bool> DeleteProductAsync(Product deletedProduct)
         {
             var productsDa = new ProductsDa(_environment);
 
             return await productsDa.DeleteProductAsync(deletedProduct);
         }
 
-        public async Task<Product> DeleteProductAsync(string id)
+        public async Task<bool> DeleteProductAsync(string id)
         {
             var productsDa = new ProductsDa(_environment);
 

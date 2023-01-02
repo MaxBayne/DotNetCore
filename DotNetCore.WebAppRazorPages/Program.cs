@@ -34,7 +34,7 @@ namespace DotNetCore.WebAppRazorPages
             //{
             //    var jsonService = app.Services.GetService<IProductsService>();
 
-            //    var products = await jsonService?.GetAllProductsAsync()!;
+            //    var products = await jsonService?.GetAllProductsFromJsonFileAsync()!;
 
             //    await context.Response.WriteAsJsonAsync(products);
             //});

@@ -1,18 +1,27 @@
 ﻿using System.Text.Json;
+using DotNetCore.DataAccess.Contexts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNetCore.DataAccess.Da
 {
     public class ProductsDa
     {
         private readonly IHostingEnvironment _environment;
+        private readonly ErpDbContext _erpDbContext;
 
         public ProductsDa(IHostingEnvironment environment)
         {
             _environment = environment;
+            _erpDbContext = new ErpDbContext();
         }
 
-        public async Task<IEnumerable<Product>?> GetAllProductsAsync()
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            return await _erpDbContext.Products.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>?> GetAllProductsFromJsonFileAsync()
         {
             //Get the path of Json File of Products
 
@@ -37,46 +46,53 @@ namespace DotNetCore.DataAccess.Da
 
         public async Task<Product> CreateProductAsync(Product newProduct)
         {
-            //Get the path of Json File of Products
+            var result = await _erpDbContext.Products.AddAsync(newProduct);
+            
+            await _erpDbContext.SaveChangesAsync();
 
-            string filePath;
+            return result.Entity;
+        }
 
-            if (_environment.WebRootPath != null)
+        public async Task<Product?> UpdateProductAsync(Product updatedProduct)
+        {
+            var currentProduct = await _erpDbContext.Products.SingleOrDefaultAsync(s => s.Id == updatedProduct.Id);
+
+            if (currentProduct != null)
             {
-                filePath = Path.Combine(_environment.WebRootPath, "data", "products.json");
+                _erpDbContext.Entry(currentProduct).CurrentValues.SetValues(updatedProduct);
+
+                await _erpDbContext.SaveChangesAsync();
             }
-            else
+
+            return currentProduct;
+        }
+
+        public async Task<bool> DeleteProductAsync(Product deletedProduct)
+        {
+            var currentProduct = await _erpDbContext.Products.SingleOrDefaultAsync(s => s.Id == deletedProduct.Id);
+
+            if (currentProduct != null)
             {
-                filePath = Path.Combine(_environment.ContentRootPath, "data", "products.json");
+                _erpDbContext.Products.Remove(currentProduct);
+                await _erpDbContext.SaveChangesAsync();
+                return true;
             }
 
-
-            using var jsonFileReader = File.OpenText(filePath);
-            var jsonString = await jsonFileReader.ReadToEndAsync();
-
-            var products = JsonSerializer.Deserialize<IEnumerable<Product>>(jsonString)!.ToList();
-
-            products.Add(newProduct);
-
-            var jsonFileWriter = File.OpenWrite(filePath);
-            await JsonSerializer.SerializeAsync(jsonFileWriter, products);
-
-            return newProduct;
+            return false;
         }
 
-        public Task<Product> UpdateProductAsync(Product updatedProduct)
+        public async Task<bool> DeleteProductAsync(string id)
         {
-            return Task.FromResult(updatedProduct);
-        }
+            var currentProduct = await _erpDbContext.Products.SingleOrDefaultAsync(s => s.Id == id);
 
-        public Task<Product> DeleteProductAsync(Product deletedProduct)
-        {
-            return Task.FromResult(deletedProduct);
-        }
+            if (currentProduct != null)
+            {
+                _erpDbContext.Products.Remove(currentProduct);
+                await _erpDbContext.SaveChangesAsync();
+                return true;
+            }
 
-        public Task<Product> DeleteProductAsync(string id)
-        {
-            return null;
+            return false;
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DotNetCore.Console": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

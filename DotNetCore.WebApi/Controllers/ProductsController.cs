@@ -50,7 +50,7 @@ namespace DotNetCore.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateProduct([FromBody]Product product)
+        public async Task<IActionResult> CreateProduct([FromBody]Product product)
         {
             try
             {
@@ -59,15 +59,14 @@ namespace DotNetCore.WebApi.Controllers
                     return BadRequest();
                 }
 
-                if (string.IsNullOrEmpty(product.Id))
+                if (string.IsNullOrEmpty(product.Name))
                 {
-                    throw new MissingFieldException("id is required");
+                    throw new MissingFieldException("Name is required");
                 }
 
-                _logger.LogInformation("created new product");
-                //return await _productsService.GetAllProductsAsync();
+                var created = await _productsService.CreateProductAsync(product);
 
-                return Created("",product);
+                return Created("", created);
             }
             catch (Exception)
             {
