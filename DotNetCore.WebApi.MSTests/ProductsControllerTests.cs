@@ -1,7 +1,7 @@
 using DotNetCore.BusinessLogic.Services;
 using DotNetCore.WebApi.Controllers;
 using FakeItEasy;
-using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,12 +10,13 @@ namespace DotNetCore.WebApi.MSTests
     [TestClass]
     public class ProductsControllerTests
     {
-        private readonly ILogger<ProductsController> _fakeLogger;
-        private readonly IProductsService _fakeProductService;
-        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private readonly List<Product> _productsDummy;
+        static ILogger<ProductsController>? _fakeLogger;
+        static IProductsService? _fakeProductService;
+        static List<Product>? _productsDummy;
 
-        public ProductsControllerTests()
+
+        [ClassInitialize]
+        public static void InitializeClass(TestContext context)
         {
             //Fake
             _fakeLogger = A.Fake<ILogger<ProductsController>>();
@@ -31,79 +32,20 @@ namespace DotNetCore.WebApi.MSTests
 
             //Config
             A.CallTo(() => _fakeProductService.GetAllProductsAsync()).Returns(_productsDummy);
+
+            context.WriteLine("InitializeClass");
         }
 
-        [TestMethod]
-        public async Task Get_Product_BY_Id_Return_Ok()
+        [ClassCleanup]
+        public static void CleanupClass()
         {
-            //Arrange
-            var controller = new ProductsController(_fakeLogger, _fakeProductService);
-            string id = "1";
-
-            //Act
-            var actionResult = await controller.GetProductById(id);
-            var actualResult = actionResult as OkObjectResult;
-
-            //Assert
-            Assert.IsNotNull(actualResult);
-            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
-
-        }
-
-        [TestMethod]
-        public async Task Get_Product_BY_Id_Return_Not_Found()
-        {
-            //Arrange
-            var controller = new ProductsController(_fakeLogger, _fakeProductService);
-            string id = "100";
-
-            //Act
-            var actionResult = await controller.GetProductById(id);
-            var actualResult = actionResult as NotFoundResult;
-
-            //Assert
-            Assert.IsNotNull(actualResult);
-            Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
-
+            
         }
 
 
+        [TestCategory("Create")]
         [TestMethod]
-        public async Task Get_All_Products_Return_Ok()
-        {
-            //Arrange
-            var controller = new ProductsController(_fakeLogger, _fakeProductService);
-
-            //Act
-            var actionResult = await controller.GetAllProducts();
-            var actualResult = actionResult as OkObjectResult;
-
-            //Assert
-            Assert.IsNotNull(actualResult);
-            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
-        }
-
-        [TestMethod]
-        public async Task Get_All_Products_Return_Not_Found()
-        {
-            //Fake
-            A.CallTo(() => _fakeProductService.GetAllProductsAsync()).Returns(new List<Product>());
-
-            //Arrange
-            var controller = new ProductsController(_fakeLogger, _fakeProductService);
-
-            //Act
-            var actionResult = await controller.GetAllProducts();
-            var actualResult = actionResult as NotFoundResult;
-
-            //Assert
-            Assert.IsNotNull(actualResult);
-            Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
-        }
-
-
-        [TestMethod]
-        public void Create_Product_Return_Created()
+        public void CreateProduct_Valid_Data_Return_Created()
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
@@ -118,11 +60,37 @@ namespace DotNetCore.WebApi.MSTests
             var actualResult = actionResult as CreatedResult;
 
             //Assert
-            Assert.AreEqual(StatusCodes.Status201Created, actualResult?.StatusCode);
+            //Assert.AreEqual(StatusCodes.Status201Created, actualResult?.StatusCode);
+            //Assert.IsInstanceOfType<CreatedResult>(actualResult);
+
+            //using FluentAssertions ====================
+            actualResult.Should().BeOfType<CreatedResult>();
+
         }
 
+        [TestCategory("Create")]
         [TestMethod]
-        public void Create_Product_Return_BadRequest()
+        public void CreateProduct_Without_Product_Return_BadRequest()
+        {
+            //Arrange
+            var controller = new ProductsController(_fakeLogger, _fakeProductService);
+
+            //Act
+            var actionResult = controller.CreateProduct(null);
+            var actualResult = actionResult as BadRequestResult;
+
+            //Assert
+            //Assert.AreEqual(StatusCodes.Status400BadRequest, actualResult?.StatusCode);
+            Assert.IsInstanceOfType<BadRequestResult>(actualResult);
+
+            //using FluentAssertions ====================
+            //actualResult.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestCategory("Create")]
+        [TestMethod]
+        [ExpectedException(typeof(MissingFieldException))]
+        public void CreateProduct_Without_Id_Throw_MissingFieldException()
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
@@ -132,10 +100,100 @@ namespace DotNetCore.WebApi.MSTests
             {
                 Name = "Test Product"
             });
-            var actualResult = actionResult as BadRequestObjectResult;
 
             //Assert
-            Assert.AreEqual(StatusCodes.Status400BadRequest, actualResult?.StatusCode);
+            //ExpectedException of type MissingFieldException
         }
+
+
+        [TestCategory("Get")]
+        [TestMethod]
+        public async Task GetAllProducts_Return_Ok_With_Products_List()
+        {
+            //Arrange
+            var controller = new ProductsController(_fakeLogger, _fakeProductService);
+
+            //Act
+            var actionResult = await controller.GetAllProducts();
+            var actualResult = actionResult as OkObjectResult;
+
+            //Assert
+            //Assert.IsNotNull(actualResult);
+            //Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+            Assert.IsInstanceOfType<OkObjectResult>(actualResult);
+
+            //using FluentAssertions ====================
+            actualResult.Should().BeOfType<OkObjectResult>();
+        }
+
+        [TestCategory("Get")]
+        [TestMethod]
+        public async Task GetAllProducts_With_Empty_Data_Return_Not_Found()
+        {
+            //Fake
+            A.CallTo(() => _fakeProductService.GetAllProductsAsync()).Returns(new List<Product>());
+
+            //Arrange
+            var controller = new ProductsController(_fakeLogger, _fakeProductService);
+
+            //Act
+            var actionResult = await controller.GetAllProducts();
+            var actualResult = actionResult as NotFoundResult;
+
+            //Assert
+            //Assert.IsNotNull(actualResult);
+            //Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
+            //Assert.IsInstanceOfType<NotFoundResult>(actualResult);
+
+            //using FluentAssertions ====================
+            actualResult.Should().BeOfType<NotFoundResult>();
+        }
+
+
+        [TestCategory("Get")]
+        [TestMethod]
+        public async Task GetProductById_With_Exist_Id_Return_Ok_With_Product_Data()
+        {
+            //Arrange
+            var controller = new ProductsController(_fakeLogger, _fakeProductService);
+            string id = "1";
+
+            //Act
+            var actionResult = await controller.GetProductById(id);
+            var actualResult = actionResult as OkObjectResult;
+
+            //Assert
+            //Assert.IsNotNull(actualResult);
+            //Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+            //Assert.IsInstanceOfType<OkObjectResult>(actualResult);
+
+            //using FluentAssertions ====================
+            actualResult.Should().BeOfType<OkObjectResult>();
+
+        }
+
+        [TestCategory("Get")]
+        [TestMethod]
+        public async Task GetProductById_Not_Exist_Id_Return_Not_Found()
+        {
+            //Arrange
+            var controller = new ProductsController(_fakeLogger, _fakeProductService);
+            string id = "100";
+
+            //Act
+            var actionResult = await controller.GetProductById(id);
+            var actualResult = actionResult as NotFoundResult;
+
+            //Assert
+            //Assert.IsNotNull(actualResult);
+            //Assert.AreEqual(StatusCodes.Status404NotFound, actualResult.StatusCode);
+            //Assert.IsInstanceOfType<NotFoundResult>(actualResult);
+
+            //using FluentAssertions ====================
+            actualResult.Should().BeOfType<NotFoundResult>();
+
+        }
+        
+        
     }
 }

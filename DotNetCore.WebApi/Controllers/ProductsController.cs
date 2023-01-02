@@ -13,15 +13,15 @@ namespace DotNetCore.WebApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductsService _productsService;
-        private readonly ILogger<ProductsController> _logger;
+        private readonly IProductsService? _productsService;
+        private readonly ILogger<ProductsController>? _logger;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="productsService"></param>
-        public ProductsController(ILogger<ProductsController> logger,IProductsService productsService)
+        public ProductsController(ILogger<ProductsController>? logger,IProductsService? productsService)
         {
             _logger = logger;
             _productsService = productsService;
@@ -54,18 +54,24 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
+                if (product == null)
+                {
+                    return BadRequest();
+                }
+
                 if (string.IsNullOrEmpty(product.Id))
                 {
-                    throw new Exception();
+                    throw new MissingFieldException("id is required");
                 }
 
                 _logger.LogInformation("created new product");
                 //return await _productsService.GetAllProductsAsync();
+
                 return Created("",product);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e);
+                throw;
             }
            
         }
@@ -226,6 +232,10 @@ namespace DotNetCore.WebApi.Controllers
                 return BadRequest(e);
             }
         }
+
+
+        
+        
 
         #endregion
     }
