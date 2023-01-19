@@ -45,13 +45,13 @@ namespace DotNetCore.WebApi.MSTests
 
         [TestCategory("Create")]
         [TestMethod]
-        public void CreateProduct_Valid_Data_Return_Created()
+        public async void CreateProduct_Valid_Data_Return_Created()
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
 
             //Act
-            var actionResult = controller.CreateProduct(new Product
+            var actionResult = await controller.CreateProduct(new Product
             {
                 Id = "1000",
                 Name = "Test Product"
@@ -70,13 +70,13 @@ namespace DotNetCore.WebApi.MSTests
 
         [TestCategory("Create")]
         [TestMethod]
-        public void CreateProduct_Without_Product_Return_BadRequest()
+        public async void CreateProduct_Without_Product_Return_BadRequest()
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
 
             //Act
-            var actionResult = controller.CreateProduct(null);
+            var actionResult = await controller.CreateProduct(null);
             var actualResult = actionResult as BadRequestResult;
 
             //Assert
