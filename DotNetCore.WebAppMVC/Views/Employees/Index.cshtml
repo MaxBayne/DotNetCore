@@ -1,0 +1,47 @@
+﻿@model EmployeesViewModel;
+
+
+<div class="row align-items-center">
+    <div class="col-auto me-auto">
+        <h1>Employees List</h1>
+    </div>
+    <div class="col-auto align-bottom">
+        <a asp-action="CreateEmployee" class="btn btn-primary">Create</a>
+    </div>
+</div>
+
+
+
+
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.Employees.Any())
+            {
+                @foreach (var employee in Model.Employees)
+                {
+                    <tr>
+                        <td>@employee.Id.ToString().Split('-')[0]</td>
+                        <td>@employee.Name</td>
+                        <td>@employee.Department</td>
+                        <td>
+                            <input type="checkbox" checked="@employee.IsActive" onclick="return false" />
+                        </td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>
