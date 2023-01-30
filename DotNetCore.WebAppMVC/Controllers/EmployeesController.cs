@@ -26,19 +26,16 @@ namespace DotNetCore.WebAppMVC.Controllers
         [HttpPost]
         public IActionResult CreateEmployee(CreateEmployeeViewModel model)
         {
-            if (string.IsNullOrEmpty(model.Employee.Department))
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("Department", "Department is Required Man");
+                model.Employee.Id = Guid.NewGuid();
 
-                return View(model);
+                Repository.AddEmployee(model.Employee);
+
+                return RedirectToAction("Index");
             }
 
-            model.Employee.Id=Guid.NewGuid();
-
-            Repository.AddEmployee(model.Employee);
-
-            return RedirectToAction("Index");
-
+            return View();
         }
 
         #endregion

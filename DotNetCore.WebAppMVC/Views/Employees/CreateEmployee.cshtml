@@ -1,11 +1,14 @@
 ﻿@model CreateEmployeeViewModel
 
-
 <h3>Create New Employee</h3>
 <hr/>
-<div>
-    
-</div>
+
+
+<div asp-validation-summary="All" class="alert-danger"></div>
+
+
+
+
 <form asp-action="CreateEmployee" method="post">
     
     <div class="form-group row">
@@ -20,7 +23,7 @@
         <label asp-for="Employee.Department" class="col-sm-1 col-form-label">Department</label>
         <div class="col-sm-10">
             <select asp-for="Employee.Department" class="form-control">
-                <option value="-1">Department</option>
+                <option value="">-</option>
                 <option value="it">Information Technology</option>
                 <option value="sales">Sales</option>
                 <option value="finance">Finance</option>
@@ -37,6 +40,33 @@
         </div>
     </div>
     
+    <div class="form-group row">
+        <label asp-for="Employee.DateOfBirth" class="col-sm-1 col-form-label">DataOfBirth</label>
+        <div class="col-sm-10">
+            <input type="date" asp-for="Employee.DateOfBirth" class="form-control" />
+            <small class="form-text text-muted">Enter the Employee Date of Birth</small>
+        </div>
+        
+    </div>
+    
+    <div class="form-group row">
+        <label asp-for="Employee.Phone" class="col-sm-1 col-form-label">Phone</label>
+        <div class="col-sm-10">
+            <input type="tel" asp-for="Employee.Phone" class="form-control" />
+            <small class="form-text text-muted">Enter the Employee Phone Number</small>
+        </div>
+        
+    </div>
+    
+    <div class="form-group row">
+        <label asp-for="Employee.Email" class="col-sm-1 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="email" asp-for="Employee.Email" class="form-control" />
+            <small class="form-text text-muted">Enter the Employee Email</small>
+        </div>
+
+    </div>
+
     <div class="form-group row">
         <div class="col-sm-1"></div>
         <div class="col-sm-10">
