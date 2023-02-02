@@ -1,78 +1,54 @@
 ﻿@model CreateEmployeeViewModel
 
 <h3>Create New Employee</h3>
-<hr/>
 
+<hr/>
 
 <div asp-validation-summary="All" class="alert-danger"></div>
 
-
-
-
 <form asp-action="CreateEmployee" method="post">
     
-    <div class="form-group row">
-        <label asp-for="Employee.Name" class="col-sm-1 col-form-label">Name</label>
-        <div class="col-sm-10">
-            <input type="text" asp-for="Employee.Name" class="form-control" placeholder="Employee" />
-            <small class="form-text text-muted">Enter the Employee Name Here</small>
-        </div>
+    <div class="form-group">
+        <label asp-for="Employee.Name" class="form-label">Name</label>
+        <input type="text" asp-for="Employee.Name" class="form-control" placeholder="Employee" />
     </div>
     
-    <div class="form-group row">
-        <label asp-for="Employee.Department" class="col-sm-1 col-form-label">Department</label>
-        <div class="col-sm-10">
-            <select asp-for="Employee.Department" class="form-control">
-                <option value="">-</option>
-                <option value="it">Information Technology</option>
-                <option value="sales">Sales</option>
-                <option value="finance">Finance</option>
-                <option value="maintenance">Maintenance</option>
-            </select>
-            <small class="form-text text-muted">Enter the Employee Department Here</small>
-        </div>
-    </div>
-    
-    <div class="form-group row">
-        <label asp-for="Employee.IsActive" class="col-sm-1 col-form-label">IsActive</label>
-        <div class="col-sm-10">
-            <input type="checkbox" asp-for="Employee.IsActive" class="form-check"/>
-        </div>
-    </div>
-    
-    <div class="form-group row">
-        <label asp-for="Employee.DateOfBirth" class="col-sm-1 col-form-label">DataOfBirth</label>
-        <div class="col-sm-10">
-            <input type="date" asp-for="Employee.DateOfBirth" class="form-control" />
-            <small class="form-text text-muted">Enter the Employee Date of Birth</small>
-        </div>
-        
-    </div>
-    
-    <div class="form-group row">
-        <label asp-for="Employee.Phone" class="col-sm-1 col-form-label">Phone</label>
-        <div class="col-sm-10">
-            <input type="tel" asp-for="Employee.Phone" class="form-control" />
-            <small class="form-text text-muted">Enter the Employee Phone Number</small>
-        </div>
-        
-    </div>
-    
-    <div class="form-group row">
-        <label asp-for="Employee.Email" class="col-sm-1 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input type="email" asp-for="Employee.Email" class="form-control" />
-            <small class="form-text text-muted">Enter the Employee Email</small>
-        </div>
+    <div class="form-group">
+        <label asp-for="Employee.Department" class="form-label">Department</label>
 
+        <select asp-for="Employee.Department" class="form-control">
+            <option value="">-</option>
+            <option value="it">Information Technology</option>
+            <option value="sales">Sales</option>
+            <option value="finance">Finance</option>
+            <option value="maintenance">Maintenance</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Employee.DateOfBirth" class="form-label">DataOfBirth</label>
+        <input type="date" asp-for="Employee.DateOfBirth" class="form-control" placeholder="Date Of Birth" />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Employee.Phone" class="form-label">Phone</label>
+        <input type="tel" asp-for="Employee.Phone" class="form-control" placeholder="Tell" />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Employee.Email" class="form-label">Email</label>
+        <input type="email" asp-for="Employee.Email" class="form-control" placeholder="Email" />
+    </div>
+    
+    <div class="form-check">
+        <label asp-for="Employee.IsActive" class="form-check-label">IsActive</label>
+
+        <input type="checkbox" asp-for="Employee.IsActive" class="form-check-input"/>
     </div>
 
-    <div class="form-group row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Create</button>
-            <button type="reset" class="btn btn-danger">Clear</button>
-        </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="reset" class="btn btn-danger">Clear</button>
     </div>
 
 </form>

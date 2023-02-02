@@ -16,6 +16,11 @@ namespace DotNetCore.DataAccess.Da
             _erpDbContext = new ErpDbContext();
         }
 
+        public async Task<Product?> GetProductByIdAsync(string id)
+        {
+            return await _erpDbContext.Products.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<List<Product>> GetAllProductsAsync()
         {
             return await _erpDbContext.Products.ToListAsync();

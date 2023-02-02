@@ -14,6 +14,7 @@ namespace DotNetCore.WebApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService? _productsService;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly ILogger<ProductsController>? _logger;
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace DotNetCore.WebApi.Controllers
         {
             _logger = logger;
             _productsService = productsService;
+            if (_logger != null) _logger.LogInformation("test log");
         }
 
         #region Binding Source
@@ -54,6 +56,7 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (product == null)
                 {
                     return BadRequest();
@@ -64,15 +67,15 @@ namespace DotNetCore.WebApi.Controllers
                     throw new MissingFieldException("Name is required");
                 }
 
-                var created = await _productsService.CreateProductAsync(product);
+                var created = await _productsService?.CreateProductAsync(product)!;
 
-                return Created("", created);
+                //return Created("", created);
+                return CreatedAtAction(nameof(CreateProduct), created);
             }
             catch (Exception)
             {
-                throw;
+                return BadRequest();
             }
-           
         }
 
         /// <summary>
@@ -88,7 +91,7 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
-                var products = await _productsService.GetAllProductsAsync();
+                var products = await _productsService!.GetAllProductsAsync();
 
                 if (products!.Any())
                 {
@@ -118,9 +121,7 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
-                var products = ((await _productsService.GetAllProductsAsync())!).ToList();
-
-                var productExist = products.FirstOrDefault(c => c.Id == id);
+                var productExist = await _productsService?.GetProductByIdAsync(id)!;
 
                 if (productExist != null)
                 {
@@ -133,7 +134,6 @@ namespace DotNetCore.WebApi.Controllers
             {
                 return BadRequest(e);
             }
-           
         }
 
         /// <summary>
@@ -151,6 +151,18 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
+                if (id != product.Id)
+                {
+                    return BadRequest();
+                }
+
+                var productExist = await _productsService?.GetProductByIdAsync(id)!;
+
+                if (productExist is null)
+                {
+                    return NotFound();
+                }
+
                 await _productsService.UpdateProductAsync(product);
 
                 return NoContent();
@@ -222,7 +234,15 @@ namespace DotNetCore.WebApi.Controllers
         {
             try
             {
-                await _productsService.DeleteProductAsync(id);
+                var productExits = await _productsService!.GetProductByIdAsync(id);
+
+                if (productExits is null)
+                {
+                    return NotFound();
+                }
+
+
+                await _productsService?.DeleteProductAsync(id)!;
 
                 return NoContent();
             }

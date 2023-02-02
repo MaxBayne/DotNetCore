@@ -6,6 +6,7 @@ namespace DotNetCore.BusinessLogic.Services
 
     public interface IProductsService
     {
+        Task<Product?> GetProductByIdAsync(string id);
         Task<IEnumerable<Product>?> GetAllProductsAsync();
         Task<Product> CreateProductAsync(Product newProduct);
         Task<Product?> UpdateProductAsync(Product updatedProduct);
@@ -20,6 +21,13 @@ namespace DotNetCore.BusinessLogic.Services
         public ProductsService(IHostingEnvironment environment)
         {
             _environment = environment;
+        }
+
+        public async Task<Product?> GetProductByIdAsync(string id)
+        {
+            var productsDa = new ProductsDa(_environment);
+
+            return await productsDa.GetProductByIdAsync(id);
         }
 
         public async Task<IEnumerable<Product>?> GetAllProductsAsync()
