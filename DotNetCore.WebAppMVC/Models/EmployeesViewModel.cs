@@ -10,4 +10,6 @@ public class EmployeesViewModel
     }
 
     public IEnumerable<Employee> Employees { get; set; }
+
+    public Employee Employee { get; set; }
 }

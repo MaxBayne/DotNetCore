@@ -6,12 +6,12 @@ namespace DotNetCore.BusinessLogic.Services
 
     public interface IProductsService
     {
-        Task<Product?> GetProductByIdAsync(string id);
+        Task<Product?> GetProductByIdAsync(Guid id);
         Task<IEnumerable<Product>?> GetAllProductsAsync();
         Task<Product> CreateProductAsync(Product newProduct);
         Task<Product?> UpdateProductAsync(Product updatedProduct);
         Task<bool> DeleteProductAsync(Product deletedProduct);
-        Task<bool> DeleteProductAsync(string id);
+        Task<bool> DeleteProductAsync(Guid id);
     }
 
     public class ProductsService : IProductsService
@@ -23,7 +23,7 @@ namespace DotNetCore.BusinessLogic.Services
             _environment = environment;
         }
 
-        public async Task<Product?> GetProductByIdAsync(string id)
+        public async Task<Product?> GetProductByIdAsync(Guid id)
         {
             var productsDa = new ProductsDa(_environment);
 
@@ -58,7 +58,7 @@ namespace DotNetCore.BusinessLogic.Services
             return await productsDa.DeleteProductAsync(deletedProduct);
         }
 
-        public async Task<bool> DeleteProductAsync(string id)
+        public async Task<bool> DeleteProductAsync(Guid id)
         {
             var productsDa = new ProductsDa(_environment);
 

@@ -11,6 +11,8 @@ namespace DotNetCore.WebAppMVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient<IProductsService,ProductsService>();
+            builder.Services.AddTransient<IDepartmentsService, DepartmentsService>();
+            builder.Services.AddTransient<IEmployeesService, EmployeesService>();
 
             var app = builder.Build();
 

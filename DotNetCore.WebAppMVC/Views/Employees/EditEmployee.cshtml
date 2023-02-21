@@ -1,22 +1,26 @@
-﻿@model CreateEmployeeViewModel
+﻿@model EditEmployeeViewModel
 
-<h3>Create New Employee</h3>
+<h3>Edit Employee</h3>
 
 <hr/>
 
 <div asp-validation-summary="All" class="alert-danger"></div>
 
-<form asp-action="CreateEmployee" method="post">
+<form asp-action="EditEmployee" method="post">
     
+    <input type="hidden" asp-for="Employee.Id"/>
+
     <div class="form-group">
         <label asp-for="Employee.Name" class="form-label">Name</label>
         <input type="text" asp-for="Employee.Name" class="form-control" placeholder="Employee" />
     </div>
     
     <div class="form-group">
-        <label asp-for="Employee.Department" class="form-label">Department</label>
+
+        <label asp-for="Employee.DepartmentId" class="form-label">Department</label>
 
         <select asp-for="Employee.DepartmentId" class="form-control" asp-items="@Model.DepartmentsSelectList"></select>
+
     </div>
     
     <div class="form-group">
@@ -41,8 +45,8 @@
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
-        <button type="reset" class="btn btn-danger">Clear</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-danger" asp-action="Index">Cancel</a>
     </div>
 
 </form>

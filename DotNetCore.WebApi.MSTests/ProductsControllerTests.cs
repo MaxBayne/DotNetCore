@@ -23,11 +23,11 @@ namespace DotNetCore.WebApi.MSTests
             _fakeProductService = A.Fake<IProductsService>();
             _productsDummy = new List<Product>()
             {
-                new Product() { Id = "1", Name = "Product 1" },
-                new Product() { Id = "2", Name = "Product 2" },
-                new Product() { Id = "3", Name = "Product 3" },
-                new Product() { Id = "4", Name = "Product 4" },
-                new Product() { Id = "5", Name = "Product 5" }
+                new Product {Id=new Guid("8763FA21-9884-4F2A-BFBD-697D35B1454A"),Name = "Product 1"},
+                new Product {Id=new Guid("EC97F074-D925-4148-BF8F-CF5F851B3975"),Name = "Product 2"},
+                new Product {Id=new Guid("B56691BB-7B54-4C85-B7B5-998D96B988C3"),Name = "Product 3"},
+                new Product {Id=new Guid("2985B68C-3BA2-42EA-9B3A-C93BE774E740"),Name = "Product 4"},
+                new Product {Id=new Guid("255A6C33-8774-4708-878E-D516837ED5BC"),Name = "Product 5"}
             };
 
             //Config
@@ -53,7 +53,7 @@ namespace DotNetCore.WebApi.MSTests
             //Act
             var actionResult = await controller.CreateProduct(new Product
             {
-                Id = "1000",
+                Id = new Guid("155A6C33-8774-4708-878E-D516837ED5BC"),
                 Name = "Test Product"
 
             });
@@ -156,7 +156,7 @@ namespace DotNetCore.WebApi.MSTests
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
-            string id = "1";
+            Guid id = new Guid("255A6C33-8774-4708-878E-D516837ED5BC");
 
             //Act
             var actionResult = await controller.GetProductById(id);
@@ -178,7 +178,7 @@ namespace DotNetCore.WebApi.MSTests
         {
             //Arrange
             var controller = new ProductsController(_fakeLogger, _fakeProductService);
-            string id = "100";
+            Guid id = new Guid("255A6C33-8774-4708-878E-D516837ED5BC");
 
             //Act
             var actionResult = await controller.GetProductById(id);

@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DotNetCore.WebAppMVC.Models;
 
-public class CreateEmployeeViewModel
+public class EditEmployeeViewModel
 {
-    public CreateEmployeeViewModel()
+
+    public EditEmployeeViewModel()
     {
         Employee = new Employee();
         Departments = new List<Department>();
@@ -16,8 +17,8 @@ public class CreateEmployeeViewModel
 
     public List<Department> Departments
     {
-        set => DepartmentsSelectList = new SelectList(value, nameof(Department.Id), nameof(Department.Name));
+        set=>DepartmentsSelectList=new SelectList(value,nameof(Department.Id),nameof(Department.Name));
     }
 
-    public SelectList DepartmentsSelectList { get; private set; }
+    public SelectList DepartmentsSelectList { get;private set; }
 }

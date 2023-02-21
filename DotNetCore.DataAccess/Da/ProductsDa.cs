@@ -16,7 +16,7 @@ namespace DotNetCore.DataAccess.Da
             _erpDbContext = new ErpDbContext();
         }
 
-        public async Task<Product?> GetProductByIdAsync(string id)
+        public async Task<Product?> GetProductByIdAsync(Guid id)
         {
             return await _erpDbContext.Products.FirstOrDefaultAsync(c => c.Id == id);
         }
@@ -86,7 +86,7 @@ namespace DotNetCore.DataAccess.Da
             return false;
         }
 
-        public async Task<bool> DeleteProductAsync(string id)
+        public async Task<bool> DeleteProductAsync(Guid id)
         {
             var currentProduct = await _erpDbContext.Products.SingleOrDefaultAsync(s => s.Id == id);
 

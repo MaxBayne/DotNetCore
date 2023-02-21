@@ -19,9 +19,11 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Department</th>
-                <th scope="col">Status</th>
+                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Name)</th>
+                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Email)</th>
+                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Department.Name)</th>
+                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.IsActive)</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -33,10 +35,16 @@
                     <tr>
                         <td>@employee.Id.ToString().Split('-')[0]</td>
                         <td>@employee.Name</td>
-                        <td>@employee.Department</td>
+                        <td>@employee.Email</td>
+                        <td>@employee.Department.Name</td>
                         <td>
                             <input type="checkbox" checked="@employee.IsActive" onclick="return false" />
                         </td>
+                        <td>
+                            <a class="btn btn-secondary" asp-action="EditEmployee" asp-route-id="@employee.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="DeleteEmployee" asp-route-id="@employee.Id" onclick="return confirm('Are you sure to Delete ?')">Delete</a>
+                        </td>
+                        
                     </tr>
                 }
             }
