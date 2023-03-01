@@ -1,13 +1,28 @@
-﻿@model EmployeesViewModel;
+﻿@using DotNetCore.WebAppMVC.Controllers
+@model EmployeesViewModel;
 
 
 <div class="row align-items-center">
-    <div class="col-auto me-auto">
+    
+    <div class="col-auto">
         <h1>Employees List</h1>
     </div>
+
+    <div class="col-8">
+        <form method="get" asp-action="Search" asp-route-field="Name">
+            <div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search By Name" name="by">
+                    <button class="btn btn-outline-secondary input-group-append" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="col-auto align-bottom">
         <a asp-action="CreateEmployee" class="btn btn-primary">Create</a>
     </div>
+
 </div>
 
 
@@ -18,10 +33,25 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Name)</th>
-                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Email)</th>
-                <th scope="col">@Html.DisplayNameFor(c=>c.Employee.Department.Name)</th>
+                <th scope="col">
+                    <a asp-action="Sort" asp-route-field="@nameof(Model.Employee.Id)" asp-route-direction="@ViewBag.SortDirection">#</a>
+                </th>
+                <th scope="col">
+                    <a asp-action="Sort" asp-route-field="@nameof(Model.Employee.Name)" asp-route-direction="@ViewBag.SortDirection">
+                        @Html.DisplayNameFor(c => c.Employee.Name)
+                    </a>
+                </th>
+                <th scope="col">
+                    <a asp-action="Sort" asp-route-field="@nameof(Model.Employee.Email)" asp-route-direction="@ViewBag.SortDirection">
+                        @Html.DisplayNameFor(c => c.Employee.Email)
+                    </a>
+                </th>
+                <th scope="col">
+                    <a asp-action="Sort" asp-route-field="Department" asp-route-direction="@ViewBag.SortDirection">
+                        @Html.DisplayNameFor(c => c.Employee.Department.Name)
+                    </a>
+                    
+                </th>
                 <th scope="col">@Html.DisplayNameFor(c=>c.Employee.IsActive)</th>
                 <th scope="col">Actions</th>
             </tr>

@@ -8,7 +8,7 @@ public class CreateEmployeeViewModel
 {
     public CreateEmployeeViewModel()
     {
-        Employee = new Employee();
+        Employee = new Employee(){DateOfBirth = DateTime.Now};
         Departments = new List<Department>();
     }
 

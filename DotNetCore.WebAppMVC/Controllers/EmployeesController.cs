@@ -2,7 +2,7 @@
 using DotNetCore.Common.DataModels;
 using DotNetCore.WebAppMVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 
 namespace DotNetCore.WebAppMVC.Controllers
@@ -15,20 +15,10 @@ namespace DotNetCore.WebAppMVC.Controllers
         public EmployeesController(IEmployeesService employeesService, IDepartmentsService departmentsService)
         {
             _employeesService = employeesService;
-            _departmentsService = departmentsService;   
+            _departmentsService = departmentsService;
         }
 
-        #region Read
 
-        public async Task<IActionResult> Index()
-        {
-            var data = await _employeesService.GetAllAsync();
-            var model = new EmployeesViewModel(data);
-
-            return View(model);
-        }
-
-        #endregion
 
         #region Create
 
@@ -47,6 +37,8 @@ namespace DotNetCore.WebAppMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeViewModel model)
         {
+            ModelState.Remove("Employee.Department");
+
             if (ModelState.IsValid)
             {
                 model.Employee.Id = Guid.NewGuid();
@@ -63,7 +55,22 @@ namespace DotNetCore.WebAppMVC.Controllers
 
         #endregion
 
-        #region Edit
+        #region Read
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var data = await _employeesService.GetAllAsync();
+
+            var model = new EmployeesViewModel(data!);
+
+            return View(model);
+        }
+
+
+        #endregion
+
+        #region Update
 
         [HttpGet]
         public async Task<IActionResult> EditEmployee(Guid id)
@@ -85,7 +92,7 @@ namespace DotNetCore.WebAppMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(Guid id,EditEmployeeViewModel model)
+        public async Task<IActionResult> EditEmployee(Guid id, EditEmployeeViewModel model)
         {
             ModelState.Remove("Employee.Department");
 
@@ -119,5 +126,74 @@ namespace DotNetCore.WebAppMVC.Controllers
         }
 
         #endregion
+
+        #region Sort
+
+        [HttpGet]
+        public async Task<IActionResult> Sort(string field, Extensions.SortDirection direction)
+        {
+            ViewBag.SortDirection = direction == Extensions.SortDirection.Ascending ? Extensions.SortDirection.Descending : Extensions.SortDirection.Ascending;
+
+            var data = await _employeesService.GetAllAsync();
+
+            var dataSorted = data.Sort(field, direction);
+
+            var model = new EmployeesViewModel(dataSorted);
+
+            return View("Index", model);
+        }
+
+
+        #endregion
+
+        #region Search
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string by,string field = "Name")
+        {
+            //ViewBag.SortDirection = direction == Extensions.SortDirection.Ascending ? Extensions.SortDirection.Descending : Extensions.SortDirection.Ascending;
+
+            var data = await _employeesService.GetAllAsync();
+
+
+            var dataSearched = data.Search(field, by);
+
+            var model = new EmployeesViewModel(dataSearched);
+
+            return View("Index", model);
+        }
+
+        #endregion
+    }
+
+    public static class Extensions
+    {
+        public enum SortDirection
+        {
+            Ascending,
+            Descending
+
+        }
+
+        public static List<Employee> Sort(this IEnumerable<Employee>? employees, string field, SortDirection direction)
+        {
+            var propertyInfo = typeof(Employee).GetProperty(field);
+
+            return direction == SortDirection.Descending ? employees!.OrderByDescending(employee => propertyInfo?.GetValue(employee, null)).ToList() : employees!.OrderBy((employee) => propertyInfo?.GetValue(employee, null)).ToList();
+        }
+        public static List<Employee> Search(this IEnumerable<Employee>? employees, string field, string by)
+        {
+            var propertyInfo = typeof(Employee).GetProperty(field);
+
+            if (string.IsNullOrEmpty(by))
+            {
+                return employees!.ToList();
+            }
+            else
+            {
+                return employees!.Where(employee => (string)propertyInfo?.GetValue(employee, null)! == by).ToList();
+            }
+            
+        }
     }
 }

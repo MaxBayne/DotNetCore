@@ -15,7 +15,7 @@ namespace DotNetCore.Common.DataModels
         [Display(Name = "Name")]
         [Column("Name",TypeName = "nvarchar(50)")]
         [Required(ErrorMessage = "Please Input Name")]
-        [StringLength(20,MinimumLength = 5,ErrorMessage = "The Length of Name is Invalid")]
+        [StringLength(50,MinimumLength = 4,ErrorMessage = "The Length of Name is Invalid")]
         public string Name { get; set; }
 
         [Display(Name = "IsActive")]

@@ -2,6 +2,7 @@
 using DotNetCore.DataAccess.Contexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using static DotNetCore.BusinessLogic.Services.EmployeesService;
 
 namespace DotNetCore.BusinessLogic.Services
 {
@@ -14,10 +15,13 @@ namespace DotNetCore.BusinessLogic.Services
         Task<Employee?> UpdateAsync(Employee updatedEmployee);
         Task<bool> DeleteAsync(Employee deletedEmployee);
         Task<bool> DeleteByIdAsync(Guid id);
+
+        //IEnumerable<Employee> Sort<TKey>(IEnumerable<Employee> employees, SortDirection direction, Func<Employee, TKey> sortField);
     }
 
     public class EmployeesService : IEmployeesService
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly IHostingEnvironment _environment;
         private ErpDbContext _dbContext;
 
@@ -69,9 +73,14 @@ namespace DotNetCore.BusinessLogic.Services
         {
             var findEmployee = await _dbContext.Employees.FirstOrDefaultAsync(c=>c.Id== updatedEmployee.Id);
 
-            _dbContext.Entry(findEmployee).CurrentValues.SetValues(updatedEmployee);
+            if (_dbContext != null)
+            {
+                _dbContext.Entry(findEmployee).CurrentValues.SetValues(updatedEmployee);
+                await _dbContext.SaveChangesAsync();
+            }
 
-            await _dbContext.SaveChangesAsync();
+
+            
 
             return updatedEmployee;
         }
@@ -93,5 +102,16 @@ namespace DotNetCore.BusinessLogic.Services
             return true;
         }
 
+
+        //public IEnumerable<Employee> Sort<TKey>(IEnumerable<Employee> employees, SortDirection direction, Func<Employee,TKey> sortField)
+        //{
+        //    return direction == SortDirection.Ascending ? employees.OrderBy(sortField).ToList() : employees.OrderByDescending(sortField).ToList();
+        //}
+
+        //public enum SortDirection
+        //{
+        //    Ascending,
+        //    Descending
+        //}
     }
 }
